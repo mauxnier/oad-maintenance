@@ -32,6 +32,50 @@ print("Testing set size:", len(test_data))
 # On cree un BN avec pyAgrum
 bn = gum.BayesNet("modèle simple")
 
+# On cree les variables
+bn.add(gum.LabelizedVariable("MODELE", "MODELE", merged_df["MODELE"].unique()))
+bn.add(gum.LabelizedVariable("CONSTRUCTEUR", "CONSTRUCTEUR", merged_df["CONSTRUCTEUR"].unique()))
+bn.add(gum.LabelizedVariable("MOTEUR", "MOTEUR", merged_df["MOTEUR"].unique()))
+bn.add(gum.LabelizedVariable("SIG_ORGANE", "SIG_ORGANE", merged_df["SIG_ORGANE"].unique()))
+bn.add(gum.LabelizedVariable("SIG_OBS", "SIG_OBS", merged_df["SIG_OBS"].unique()))
+bn.add(gum.LabelizedVariable("SYSTEM_N1", "SYSTEM_N1", merged_df["SYSTEM_N1"].unique()))
+
+
+# On cree les liens entre les variables
+#bn.addArc("MODELE", "SYSTEM_N1")
+#bn.addArc("CONSTRUCTEUR", "SYSTEM_N1")
+#bn.addArc("MOTEUR", "SYSTEM_N1")
+bn.addArc("SIG_ORGANE", "SYSTEM_N1")
+#bn.addArc("SIG_OBS", "SYSTEM_N1")
+
+ie = gum.LazyPropagation(bn)
+ie.makeInference()
+
+predictions = ie.posterior("SYSTEM_N1")
+
+
+# Créer un classifieur basé sur le réseau bayésien
+#classifier = gum.BNLearner(train_data, bn)
+
+# Effectuer l'apprentissage du réseau bayésien à partir des données d'entraînement
+#classifier.learnBN()
+
+# Récupérer les variables cibles du réseau bayésien
+target_variables = ['SYSTEM_N1']
+
+# Récupérer les données de test pour les variables cibles
+test_data_target = test_data[target_variables]
+
+# Effectuer les prédictions sur les données de test
+#predictions = classifier.predict(test_data)
+
+# Évaluer les performances du modèle
+accuracy = (predictions == test_data_target).mean()
+print("Accuracy:", accuracy)
+
+
+
+
 
 
 
