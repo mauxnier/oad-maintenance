@@ -1,0 +1,4 @@
+pip install pyagrum
+pip install dash plotly
+pip install dash-core-components dash-html-components dash-table
+pip install dash_bootstrap_components
