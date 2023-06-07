@@ -1,6 +1,6 @@
 from ia.model_training import ModelTraining
 from ia.data_process import DataProcess
-from web.app import MyApp
+from web.front_app import WebApp
 
 # Variable des catégories
 var_cat = [
@@ -55,7 +55,7 @@ modele.fit_model()  # Entrainer le modèle
 # Lancement de l'application
 if __name__ == "__main__":
     # Créer une instance de la classe MyApp
-    my_app = MyApp(
+    web_app = WebApp(
         model_name="OAD - Système de recommandation de système de réparation automobile",
         var_features=var_features,
         var_targets=var_targets,
@@ -64,4 +64,4 @@ if __name__ == "__main__":
     )
 
     # Lancer l'application
-    my_app.run()
+    web_app.run()

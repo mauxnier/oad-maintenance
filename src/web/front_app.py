@@ -1,18 +1,14 @@
 import dash
-
-# import dash_core_components as dcc
 from dash import dcc
-
-# import dash_html_components as html
 from dash import html
+from dash import dash_table
 
-# import dash_bootstrap_components as dbc
-import dash_table
+# from dash.dash_table.Format import Group
 import plotly.express as px
 import pyAgrum as gum
 
 
-class MyApp:
+class WebApp:
     def __init__(self, model_name, var_features, var_targets, bn, data_df):
         self.app = dash.Dash(__name__)
         self.model_name = model_name
