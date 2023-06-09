@@ -21,7 +21,13 @@ class WebApp:
                        
 
         self.app.layout = html.Div(
-            [
+            style={
+                "background-image": "url('src/web/background.jpg')",
+                "background-size": "cover",
+                "background-repeat": "no-repeat",
+                "background-position": "center",
+            },
+            children=[
                 html.H1(model_name),
                 html.Div(
                     [
@@ -44,11 +50,15 @@ class WebApp:
                 ),
                 html.Div(
                     [
-                        dcc.Graph(id=f"{var}-graph", config={"displayModeBar": False})
+                        html.Div(
+                            dcc.Graph(id=f"{var}-graph", config={"displayModeBar": False}),
+                            style={"width": "33%", "display": "inline-block"}
+                        )
                         for var in var_targets
                     ],
-                    style={"width": "65%", "float": "right", "display": "inline-block"},
-                ),
+                    style={"width": "100%", "display": "flex", "flexWrap": "wrap"}
+                )
+
             ]
         )
 
@@ -71,7 +81,8 @@ class WebApp:
                 var_names = {"SYSTEM_N1": "Système de niveau 1",
                              "SYSTEM_N2": "Système de niveau 2",
                              "SYSTEM_N3": "Système de niveau 3",
-                             "TYPE_TRAVAIL": "Type de travail"}
+                             "TYPE_TRAVAIL": "Type de travail",
+                             "ODR_LIBELLE": "Libellé de la réparation"}
 
                 # Create bar chart figure
                 fig = go.Figure()

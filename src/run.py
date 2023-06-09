@@ -33,28 +33,28 @@ var_cat = [
 #         ]
 
 # Configuration des modèles complexes
-# model_name = "modele complexe"
-# var_features = ["SIG_ORGANE", "SIG_OBS", "MOTEUR"]
-# var_targets = ["SYSTEM_N1", "SYSTEM_N2", "SYSTEM_N3","TYPE_TRAVAIL", "ODR_LIBELLE"]
-# arcs = [("SYSTEM_N3", "SIG_ORGANE"), 
-#         ("SYSTEM_N3", "SIG_OBS"),
-#         ("SYSTEM_N3", "MOTEUR"),
-#         ("SYSTEM_N3", "SYSTEM_N2"),
-#         ("SYSTEM_N2", "SYSTEM_N1"),
-#         ("SYSTEM_N3", "TYPE_TRAVAIL"),
-#         ("SYSTEM_N3", "ODR_LIBELLE"),
-#         ("SIG_ORGANE", "ODR_LIBELLE")
-#         ]
-
-model_name = "modele complexe sans odr_libelle"
+model_name = "modele complexe"
 var_features = ["SIG_ORGANE", "SIG_OBS", "MOTEUR"]
-var_targets = ["SYSTEM_N1", "SYSTEM_N2", "SYSTEM_N3","TYPE_TRAVAIL"]
+var_targets = ["SYSTEM_N1", "SYSTEM_N2", "SYSTEM_N3","TYPE_TRAVAIL", "ODR_LIBELLE"]
 arcs = [("SYSTEM_N3", "SIG_ORGANE"), 
         ("SYSTEM_N3", "SIG_OBS"),
         ("SYSTEM_N3", "MOTEUR"),
         ("SYSTEM_N3", "SYSTEM_N2"),
         ("SYSTEM_N2", "SYSTEM_N1"),
-        ("SYSTEM_N3", "TYPE_TRAVAIL")]
+        ("SYSTEM_N3", "TYPE_TRAVAIL"),
+        ("SYSTEM_N3", "ODR_LIBELLE"),
+        ("SIG_ORGANE", "ODR_LIBELLE")
+        ]
+
+# model_name = "modele complexe sans odr_libelle"
+# var_features = ["SIG_ORGANE", "SIG_OBS", "MOTEUR"]
+# var_targets = ["SYSTEM_N1", "SYSTEM_N2", "SYSTEM_N3","TYPE_TRAVAIL"]
+# arcs = [("SYSTEM_N3", "SIG_ORGANE"), 
+#         ("SYSTEM_N3", "SIG_OBS"),
+#         ("SYSTEM_N3", "MOTEUR"),
+#         ("SYSTEM_N3", "SYSTEM_N2"),
+#         ("SYSTEM_N2", "SYSTEM_N1"),
+#         ("SYSTEM_N3", "TYPE_TRAVAIL")]
 
 # Charger les données
 data = DataProcess()
@@ -65,7 +65,7 @@ modele = ModelTraining(
     data.data_df, model_name, var_cat, var_features, var_targets, arcs
 )
 modele.fit_model()  # Entrainer le modèle
-modele.evaluate_model()  # Evaluer le modèle
+#modele.evaluate_model()  # Evaluer le modèle
 
 # Lancement de l'application
 if __name__ == "__main__":

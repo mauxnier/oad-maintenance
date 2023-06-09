@@ -17,7 +17,7 @@ class ModelTraining:
         self.test_data = None
         self.bn = None
 
-    def preprocess_data(self, test_size=0.002, random_state=42):
+    def preprocess_data(self, test_size=0.2, random_state=42):
         # Convertir les variables catégorielles en type 'category'
         for var in self.var_cat:
             self.data_df[var] = self.data_df[var].astype("category")
