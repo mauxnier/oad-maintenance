@@ -1,10 +1,8 @@
 import dash
 from dash import dcc
 from dash import html
-from dash import dash_table
 
-# from dash.dash_table.Format import Group
-import plotly.express as px
+import plotly.graph_objects as go
 import pyAgrum as gum
 
 
@@ -16,6 +14,11 @@ class WebApp:
         self.var_targets = var_targets
         self.bn = bn
         self.data_df = data_df
+        label_names = {
+            "SIG_ORGANE": "Organe Signalé",
+            "SIG_OBS": "Observation Signalée",
+            "MOTEUR": "Moteur du véhicule"}
+                       
 
         self.app.layout = html.Div(
             [
@@ -24,7 +27,7 @@ class WebApp:
                     [
                         html.Div(
                             [
-                                html.Label(var),
+                                html.Label(label_names[var]),
                                 dcc.Dropdown(
                                     id=f"{var}-dropdown",
                                     options=[
@@ -40,32 +43,18 @@ class WebApp:
                     style={"width": "30%", "display": "inline-block"},
                 ),
                 html.Div(
-                    [dcc.Graph(id=f"{var}-graph") for var in var_targets],
-                    style={"width": "65%", "float": "right", "display": "inline-block"},
-                ),
-                html.H3("Analyse de données"),
-                dash_table.DataTable(
-                    id="datatable",
-                    columns=[
-                        {"name": "Variable", "id": "Variable"},
-                        {"name": "Probability", "id": "Probability"},
-                        {"name": "System", "id": "System"},
+                    [
+                        dcc.Graph(id=f"{var}-graph", config={"displayModeBar": False})
+                        for var in var_targets
                     ],
-                    data=[],
-                    style_table={"width": "30%"},
-                    style_data={"whiteSpace": "normal", "height": "auto"},
-                    style_cell={"textAlign": "left"},
+                    style={"width": "65%", "float": "right", "display": "inline-block"},
                 ),
             ]
         )
 
         @self.app.callback(
-            [dash.dependencies.Output(f"{var}-graph", "figure") for var in var_targets]
-            + [dash.dependencies.Output("datatable", "data")],
-            [
-                dash.dependencies.Input(f"{var}-dropdown", "value")
-                for var in var_features
-            ],
+            [dash.dependencies.Output(f"{var}-graph", "figure") for var in var_targets],
+            [dash.dependencies.Input(f"{var}-dropdown", "value") for var in var_features],
         )
         def update_graph(*var_features_values):
             bn_ie = gum.LazyPropagation(bn)
@@ -75,25 +64,32 @@ class WebApp:
             bn_ie.makeInference()
 
             prob_target = []
-            datatable_data = []
 
             for idx, var in enumerate(var_targets):
                 prob_target_var = bn_ie.posterior(var).topandas().droplevel(0)
-                prob_fig = px.bar(prob_target_var)
-                prob_target.append(prob_fig)
+                top_5_values = prob_target_var.nlargest(5)
+                var_names = {"SYSTEM_N1": "Système de niveau 1",
+                             "SYSTEM_N2": "Système de niveau 2",
+                             "SYSTEM_N3": "Système de niveau 3",
+                             "TYPE_TRAVAIL": "Type de travail"}
 
-                # Get the top 5 maximum probability values and their variables
-                top_5_values = prob_target_var.nlargest(5).reset_index()
-                top_5_values.columns = ["Variable", "Probability"]
-                top_5_values["Variable"] = top_5_values["Variable"].replace(
-                    {"SYSTEM_N1": "N1", "SYSTEM_N2": "N2", "SYSTEM_N3": "N3"}
+                # Create bar chart figure
+                fig = go.Figure()
+                fig.add_trace(
+                    go.Bar(
+                        x=top_5_values.index,
+                        y=top_5_values.values,
+                        marker_color="blue",
+                    )
                 )
-                top_5_values[
-                    "System"
-                ] = f"System {idx + 1}"  # Add System column based on the graph index
-                datatable_data += top_5_values.to_dict("records")
+                fig.update_layout(
+                    title=f"Prédiction : {var_names[var]}",
+                    xaxis_title="Valeur",
+                    yaxis_title="Probabilité",
+                )
+                prob_target.append(fig)
 
-            return tuple(prob_target) + (datatable_data,)
+            return tuple(prob_target)
 
     def run(self):
         self.app.run_server(debug=True)
