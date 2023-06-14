@@ -1,8 +1,5 @@
 import pandas as pd
 import os
-from sklearn.model_selection import train_test_split
-
-# import modules.pyagrum_extra as gum0
 
 
 class DataProcess:
