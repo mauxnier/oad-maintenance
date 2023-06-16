@@ -1,5 +1,6 @@
-# oad-maintenance
-Outils d'aide à la décision pour le pilotage de la maintenance et la réalisation des actions de réparation
+# OAD maintenance
+Outils d'aide à la décision pour le pilotage de la maintenance et la réalisation des actions de réparation sur des véhicules.
+Ce projet utilise les notions de [réseaux bayésiens](https://fr.wikipedia.org/wiki/R%C3%A9seau_bay%C3%A9sien).
 
 https://roland-donat.github.io/cours-rb/ensibs/projet/maintenance/projet.html
 
