@@ -1,4 +1,4 @@
-# OAD maintenance
+# OAD maintenance 🚗
 Outil d'aide à la décision pour le pilotage de la maintenance et la réalisation des actions de réparation sur des véhicules.
 Ce projet utilise les notions de [réseaux bayésiens](https://fr.wikipedia.org/wiki/R%C3%A9seau_bay%C3%A9sien).
 
